@@ -8,10 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import tz.go.bot.controller.NoticesController;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
@@ -48,25 +52,30 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+//    @Override
+//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+//
+////        authenticationManagerBuilder
+////                .inMemoryAuthentication()
+////                .withUser("admin").password("123456").authorities("admin")
+////                .and()
+////                .withUser("user").password("654321").authorities("read")
+////                .and()
+////                .passwordEncoder(NoOpPasswordEncoder.getInstance());
+//
+//        InMemoryUserDetailsManager userDetailsManager=new InMemoryUserDetailsManager();
+//        UserDetails user1= User.withUsername("admin").password("123456").authorities("admin").build();
+//        UserDetails user2= User.withUsername("user").password("654321").authorities("read").build();
+//
+//        userDetailsManager.createUser(user1);
+//        userDetailsManager.createUser(user2);
+//
+//        authenticationManagerBuilder.userDetailsService(userDetailsManager);
+//    }
 
-//        authenticationManagerBuilder
-//                .inMemoryAuthentication()
-//                .withUser("admin").password("123456").authorities("admin")
-//                .and()
-//                .withUser("user").password("654321").authorities("read")
-//                .and()
-//                .passwordEncoder(NoOpPasswordEncoder.getInstance());
-
-        InMemoryUserDetailsManager userDetailsManager=new InMemoryUserDetailsManager();
-        UserDetails user1= User.withUsername("admin").password("123456").authorities("admin").build();
-        UserDetails user2= User.withUsername("user").password("654321").authorities("read").build();
-
-        userDetailsManager.createUser(user1);
-        userDetailsManager.createUser(user2);
-
-        authenticationManagerBuilder.userDetailsService(userDetailsManager);
+    @Bean
+    public UserDetailsService userDetailsService(DataSource dataSource){
+        return  new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean
