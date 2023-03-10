@@ -34,3 +34,12 @@ CREATE TABLE IF NOT EXISTS public.authorities
 
 ALTER TABLE IF EXISTS public.authorities
     OWNER to postgres;
+
+
+INSERT INTO public.users(
+    id, username, password, enabled)
+VALUES (1, 'tom', '12345', '1');
+
+INSERT INTO public.authorities(
+    id, username, authority)
+VALUES (1, 'tom', 'write');
