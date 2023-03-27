@@ -63,10 +63,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .and()
-                .csrf()
-                .ignoringAntMatchers("/contact")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                .csrf().disable()
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JWTTokenValidationFilter(),BasicAuthenticationFilter.class)
