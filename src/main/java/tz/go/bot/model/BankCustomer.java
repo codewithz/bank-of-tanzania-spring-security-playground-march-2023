@@ -1,6 +1,9 @@
 package tz.go.bot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "BankCustomer")
 @Table(name ="bank_customer")
@@ -28,11 +31,17 @@ public class BankCustomer {
     @Column(
             name="password"
     )
+    @JsonIgnore
     private String password;
     @Column(
             name="role"
     )
     private String role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
+
 
     public Integer getId() {
         return id;
@@ -65,4 +74,14 @@ public class BankCustomer {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 }
+
+
