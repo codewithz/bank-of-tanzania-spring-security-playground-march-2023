@@ -14,10 +14,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import tz.go.bot.controller.NoticesController;
+import tz.go.bot.filter.AuthoritiesLoggingAfterFilter;
+import tz.go.bot.filter.RequestValidationBeforeFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
@@ -62,6 +65,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/contact")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/accounts").hasAuthority("READ")
                 .antMatchers("/balance").hasAnyAuthority("READ","WRITE")
