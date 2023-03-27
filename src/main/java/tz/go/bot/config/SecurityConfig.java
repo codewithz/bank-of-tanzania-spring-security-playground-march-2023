@@ -64,7 +64,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/accounts").hasAuthority("READ")
-                .antMatchers("/balance").hasAnyAuthority()
+                .antMatchers("/balance").hasAnyAuthority("READ","WRITE")
                 .antMatchers("/cards").hasAuthority("WRITE")
                 .antMatchers("/loans").authenticated()
                 .antMatchers("/notices").permitAll()
