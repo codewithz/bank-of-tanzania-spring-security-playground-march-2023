@@ -56,7 +56,7 @@ public class BOTUsernamePasswordAuthenticationProvider implements Authentication
             }
         }
         else{
-            throw new BadCredentialsException("No User Registed with given username");
+            throw new BadCredentialsException("No User Registered with given username");
         }
 
     }

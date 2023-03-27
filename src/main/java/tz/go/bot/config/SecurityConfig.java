@@ -14,9 +14,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import tz.go.bot.controller.NoticesController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
@@ -39,6 +43,20 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 //                .httpBasic();
 
         http
+                .cors()
+                .configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration configuration=new CorsConfiguration();
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedMethods(Collections.singletonList("*")); //GET,POST,PUT,DELETE
+                        configuration.setAllowCredentials(true);
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+                        configuration.setMaxAge(3600L);
+                        return  configuration;
+                    }
+                })
+                .and()
                 .authorizeRequests()
                 .antMatchers("/accounts").authenticated()
                 .antMatchers("/balance").authenticated()
