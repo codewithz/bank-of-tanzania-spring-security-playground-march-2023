@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import tz.go.bot.controller.NoticesController;
 import tz.go.bot.filter.AuthoritiesLoggingAfterFilter;
+import tz.go.bot.filter.JWTTokenGeneratorFilter;
+import tz.go.bot.filter.JWTTokenValidationFilter;
 import tz.go.bot.filter.RequestValidationBeforeFilter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +69,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidationFilter(),BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter(),BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/accounts").hasAuthority("READ")
                 .antMatchers("/balance").hasAnyAuthority("READ","WRITE")
